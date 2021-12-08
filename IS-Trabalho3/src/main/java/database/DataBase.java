@@ -130,6 +130,14 @@ public class DataBase {
         Statement statement = this.con.createStatement();
         statement.executeUpdate(sql);
     }
+
+    //Admin pediu total credits
+    public String AdminGetTotalCredits() throws SQLException {
+        String sql = "SELECT total FROM totalcredits";
+        Statement statement = this.con.createStatement();
+        ResultSet rs = statement.executeQuery(sql);
+        return rs.getString("total");
+    }
 }
 
 

@@ -1,19 +1,20 @@
 package kafka;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Properties;
 
 import database.DataBase;
-import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+
 public class DataBaseProducer {
     public static void main(String[] args) throws Exception{
 
         /*
         .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
         .\bin\windows\kafka-server-start.bat .\config\server.properties
+        .\bin\windows\connect-standalone.bat .\config\connect-standalone.properties config\connect-jdbc-source-IS3.properties .\config\connect-jdbc-sink-IS3.properties
+        .\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic DBInfoTopic --from-beginning
+        .\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic ResultsTopic
         */
         DataBase bd = new DataBase();
         bd.connect();
@@ -37,22 +38,12 @@ public class DataBaseProducer {
 
         props.put("buffer.memory", 33554432);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.LongSerializer");
-        Producer<String, Long> producer = new KafkaProducer<>(props);
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        Producer<String, String> producer = new KafkaProducer<>(props);
 
-        //LER DA BD, receber a lista dos clientes e managers
-        ArrayList<String> users = bd.getUsers();
-        for (String s : users) {
-            String[] user = s.split(";");
-            //Envia para o tópico o id do user e o seu nome
-            producer.send(new ProducerRecord<>(DBInfoTopic, user[1], Long.parseLong(user[0])));
-            System.out.println("Enviei "+user[1]+" "+user[0]+"\n");
-            if (user[2].equals("0")) { //É um cliente
-                //Criar a thread cliente que faz o Payments e Credits
-            }
-        }
-        //Wait for threads
+        //{"schema":{"type":"struct","fields":[{"type":"string","optional":false,"field":"name"},{"type":"float","optional":false,"field":"value"},{"type":"int32","optional":true,"field":"clientid"}],"optional":false,"name":"utilizadores"},"payload":{"name":"TotalCredits","value":100.0,"clientid":1}}
 
+        producer.send(new ProducerRecord<String,String>("ResultsTopic","ola" , "{\"schema\":{\"type\":\"struct\",\"fields\":[{\"type\":\"string\",\"optional\":false,\"field\":\"name\"},{\"type\":\"float\",\"optional\":false,\"field\":\"value\"},{\"type\":\"int32\",\"optional\":true,\"field\":\"clientid\"}],\"optional\":false,\"name\":\"utilizadores\"},\"payload\":{\"name\":\"TotalCredits\",\"value\":200.0,\"clientid\":1}}"));
         producer.close();
     }
 }
