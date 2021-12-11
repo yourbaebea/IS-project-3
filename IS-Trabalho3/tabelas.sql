@@ -16,5 +16,15 @@ CREATE TABLE IF NOT EXISTS currencies (
     PRIMARY KEY(id)
     );
 
+CREATE TABLE IF NOT EXISTS resultstopic (
+    clientid serial NOT NULL,
+    totalCredits float,
+    totalPayments float ,
+    billlastmonth float,
+    last2months int,
+    PRIMARY KEY(id)
+    );
+
+
 
 COMMIT;

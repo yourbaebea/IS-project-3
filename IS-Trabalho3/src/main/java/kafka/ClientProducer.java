@@ -1,14 +1,8 @@
 package kafka;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Properties;
 import java.util.Random;
 
-import database.DataBase;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,13 +14,6 @@ public class ClientProducer {
         .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
         .\bin\windows\kafka-server-start.bat .\config\server.properties
         */
-
-
-
-        //Topic to where it writes
-        String PaymentsTopic = "PaymentsTopic";
-        String CreditsTopic = "CreditsTopic";
-        String DBInfoTopic = "DBInfoTopic";
 
         // create instance for properties to access producer configs
         Properties props = new Properties();
@@ -46,7 +33,7 @@ public class ClientProducer {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.DoubleSerializer");
 
-        Producer<String, Double> producer = new KafkaProducer<>(props);
+        Producer<String, Double> producer2 = new KafkaProducer<>(props);
 
 
         //SO PRA TESTAR
@@ -59,7 +46,7 @@ public class ClientProducer {
         Random gerador = new Random();
         String credit;
         Double price;
-        while(true){
+        //while(true){
 
             //Escolhe uma currency Random
             credit = currencies.get(gerador.nextInt(currencies.size()));
@@ -68,15 +55,14 @@ public class ClientProducer {
             //Gera um double e multiplica pelo exchange rate da currency selecionada
             //Assim o preço já está em euros
             price = (gerador.nextDouble() * Double.parseDouble(creditfinal[1]));
-            System.out.println(price +" "+ creditfinal[0]);
+            //System.out.println(price +" "+ creditfinal[0]);
 
             //Escreve nos Payments
-            producer.send(new ProducerRecord<>(PaymentsTopic,args[0]+";"+creditfinal[0],price));
+            producer2.send(new ProducerRecord<>("CreditsTopic",args[0],100.0));
+            //Thread.sleep(10000);
+            producer2.send(new ProducerRecord<>("PaymentsTopic",args[0],10.0));
 
-            //Escreve nos Credits
-            producer.send(new ProducerRecord<>(CreditsTopic,args[0]+";"+creditfinal[0],price));
-
-            Thread.sleep(10000);
-        }
+        //}
     }
 }
+
