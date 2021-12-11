@@ -8,10 +8,6 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <artifactId>KafkaStreams</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>KAFKA</module>
-        <module>REST-IS</module>
-    </modules>
     <name>KafkaStreams</name>
     <description>A simple KafkaStreams.</description>
     <url>http://maven.apache.org</url>

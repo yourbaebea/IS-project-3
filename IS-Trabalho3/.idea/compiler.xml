@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="IS-Trabalho3" />
+        <module name="REST-IS" />
       </profile>
     </annotationProcessing>
   </component>
